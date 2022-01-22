@@ -1,7 +1,7 @@
 <template>
   <div class="create">
-    <input type="text" class="create__input" />
-    <button type="button" class="create__button">+</button>
+    <input type="text" class="create__input" v-model="content" />
+    <button type="button" class="create__button" @click="addItem">+</button>
   </div>
 </template>
 
@@ -9,7 +9,17 @@
 import { Component, Vue } from "vue-property-decorator";
 
 @Component
-export default class extends Vue {}
+export default class extends Vue {
+  content = "";
+
+  addItem(): void {
+    this.$store.commit("addItem", {
+      id: this.$store.state.todo.itemList.length + 1,
+      content: this.content,
+      status: "yet",
+    });
+  }
+}
 </script>
 
 <style scoped></style>

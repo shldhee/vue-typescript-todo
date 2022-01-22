@@ -1,16 +1,20 @@
 <template>
   <div class="status">
-    <!-- <Create /> -->
-    <h1>hi</h1>
+    <Create />
+    <List />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-// import Create from "./components/Create.vue";
+import Create from "@/components/Create.vue";
+import List from "@/components/List.vue";
 
 @Component({
-  // components: { Create },
+  components: {
+    Create,
+    List,
+  },
 })
 export default class extends Vue {}
 </script>

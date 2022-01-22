@@ -6,6 +6,7 @@
           class="list__check-input"
           type="checkbox"
           :checked="item.status === 'clear'"
+          @change="changeStatus(item)"
         />
       </span>
       <div class="list__text-input-wrapper">
@@ -19,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 
 interface ItemList {
   id: number;
@@ -29,20 +30,34 @@ interface ItemList {
 
 @Component
 export default class extends Vue {
-  // data를 요로케 선언한다.?
-  itemList: ItemList[] = [
-    { id: 1, content: "씻기", status: "clear" },
-    { id: 2, content: "준비하기", status: "clear" },
-    { id: 3, content: "학교가기", status: "clear" },
-    { id: 4, content: "게임하기", status: "yet" },
-  ];
+  itemList: ItemList[] = [];
 
   created(): void {
-    // this.itemList = this.$store.state.itemList;
+    this.itemList = this.$store.state.todo.itemList;
   }
-
+  initItem(): void {
+    this.itemList = this.$store.state.todo.itemList;
+  }
   removeItem(id: number): void {
     this.$store.commit("removeItem", id);
+    this.initItem();
+  }
+  changeStatus(item: ItemList): void {
+    console.log(this.$route.params.status);
+    this.$store.commit("changeStatus", item);
+    this.initItem();
+  }
+
+  @Watch("$route.params.status")
+  routeUpdate(newValue: string): void {
+    console.log("newValue :", newValue);
+    if (!newValue) {
+      this.itemList = this.$store.state.todo.itemList;
+    } else if (newValue === "yet") {
+      this.itemList = this.$store.getters.setYet;
+    } else {
+      this.itemList = this.$store.getters.setClear;
+    }
   }
 }
 </script>
