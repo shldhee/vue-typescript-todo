@@ -1,4 +1,8 @@
-import { Module, VuexModule, Mutation } from "vuex-module-decorators";
+import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
+import AxiosService from "@/service/axios.service";
+// import axios from "axios";
+import axios, { AxiosResponse } from "axios";
+
 export interface ItemList {
   id: number;
   content: string;
@@ -32,6 +36,24 @@ export default class Todo extends VuexModule {
   changeStatus(item: ItemList): void {
     const idx = this.itemList.findIndex((param) => param.id === item.id);
     this.itemList[idx].status = item.status === "yet" ? "clear" : "yet";
+  }
+
+  @Mutation
+  setItem(itemList: ItemList[]): void {
+    this.itemList = itemList;
+  }
+
+  @Action
+  async getItem(): Promise<void> {
+    console.log("action get");
+    // const response: AxiosResponse = await axios.get(`url axios`);
+    // console.log("response : ", response);
+    this.context.commit("setItem", [
+      { id: 1, content: "씻기-axios", status: "clear" },
+      { id: 2, content: "준비하기-axios", status: "clear" },
+      { id: 3, content: "학교가기-axios", status: "clear" },
+      { id: 4, content: "게임하기-axios", status: "yet" },
+    ]);
   }
 
   get setYet(): ItemList[] {

@@ -33,6 +33,8 @@ export default class extends Vue {
   itemList: ItemList[] = [];
 
   created(): void {
+    console.log(this.$store);
+    this.$store.dispatch("getItem");
     this.itemList = this.$store.state.todo.itemList;
   }
   initItem(): void {
